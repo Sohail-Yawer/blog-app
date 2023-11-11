@@ -1,37 +1,29 @@
-import React, { useEffect, useState } from 'react';
+// Home.js
+import React, { useEffect } from 'react';
 import SearchBox from '../../components/searchbox/searchbox.component';
 import CreateBlog from '../../components/createblog/createblog.component';
 import BlogList from '../../components/bloglist/bloglist.component';
+import { useYourContext, ACTIONS } from '../../context/context';
 
 const Home = () => {
-  const [showCreateBlog, setShowCreateBlog] = useState(true);
-  const [showBlogList, setShowBlogList] = useState(false);
-  const [blogs, setBlogs] = useState([]);
-  const [records, setRecords] = useState([]);
-  const [loading, setLoading] = useState(true); 
+  const { state, dispatch } = useYourContext();
 
   useEffect(() => {
     fetch('http://localhost:3002/blogs')
-      .then(response => response.json())
-      .then(data => {
-        setBlogs(data);
-        setRecords(data);
-        setLoading(false); // Set loading to false 
-      })
-      .catch(error => {
+      .then((response) => response.json())
+      .then((data) => dispatch({ type: ACTIONS.FETCH_BLOGS, payload: data }))
+      .catch((error) => {
         console.error('Error fetching blogs:', error);
-        setLoading(false); 
+        dispatch({ type: ACTIONS.SET_LOADING, payload: false });
       });
-  }, []);
+  }, [dispatch]);
 
   const handleCreateBlogClick = () => {
-    setShowCreateBlog(true);
-    setShowBlogList(false);
+    dispatch({ type: ACTIONS.SHOW_CREATE_BLOG });
   };
 
   const handleBlogListClick = () => {
-    setShowCreateBlog(false);
-    setShowBlogList(true);
+    dispatch({ type: ACTIONS.SHOW_BLOG_LIST });
   };
 
   const handlePublish = (newBlog) => {
@@ -43,14 +35,7 @@ const Home = () => {
       body: JSON.stringify(newBlog),
     })
       .then((response) => response.json())
-      .then((data) => {
-        // Update the local state with the new blog
-        setBlogs((prevBlogs) => [...prevBlogs, data]);
-        setRecords((prevRecords) => [...prevRecords, data]);
-  
-        setShowCreateBlog(false);
-        setShowBlogList(true);
-      })
+      .then((data) => dispatch({ type: ACTIONS.PUBLISH_BLOG, payload: data }))
       .catch((error) => {
         console.error('Error publishing blog:', error);
         // Handle error as needed
@@ -58,17 +43,14 @@ const Home = () => {
   };
 
   const searchBlogs = (searchTerm) => {
-    const filteredBlogs = records.filter(
-      (blog) => blog.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      blog.content.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    setBlogs(filteredBlogs);
+    dispatch({ type: ACTIONS.SEARCH_BLOGS, payload: searchTerm });
   };
 
   return (
     <div>
       <h2>Home page</h2>
-      <SearchBox onSearch={searchBlogs} />
+      <SearchBox onChange={searchBlogs} />
+      {state.loading && <p>Loading...</p>}
       <button type="button" onClick={handleCreateBlogClick}>
         New Post
       </button>
@@ -76,8 +58,8 @@ const Home = () => {
         Published
       </button>
       <div className="btn-click-area">
-        {showCreateBlog && <CreateBlog onPublish={handlePublish} />}
-        {showBlogList && <BlogList blogs={blogs} />}
+        {state.showCreateBlog && <CreateBlog onPublish={handlePublish} />}
+        {state.showBlogList && <BlogList blogs={state.blogs} />}
       </div>
     </div>
   );

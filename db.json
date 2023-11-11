@@ -27,13 +27,8 @@
     },
     {
       "title": "title 6",
-      "content": "content for title 6. test",
+      "content": "test for blog 6. using reducer.",
       "id": 6
-    },
-    {
-      "title": "Buildings",
-      "content": "buildings are a huge constructed entities used for various purposes.",
-      "id": 7
     }
   ]
 }

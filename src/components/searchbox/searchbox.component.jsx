@@ -1,12 +1,13 @@
+// searchbox.component.jsx
 import React, { useState } from 'react';
 
-const SearchBox = ({ onSearch }) => {
+const SearchBox = ({ onChange }) => {
   const [searchTerm, setSearchTerm] = useState('');
 
   const handleSearchChange = (event) => {
     const newSearchTerm = event.target.value;
     setSearchTerm(newSearchTerm);
-    onSearch(newSearchTerm); 
+    onChange(newSearchTerm); // Corrected from onSearch to onChange
   };
 
   return (
