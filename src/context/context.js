@@ -45,7 +45,8 @@ const reducer = (state, action) => {
           blog.title.toLowerCase().includes(searchTerm) ||
           blog.content.toLowerCase().includes(searchTerm)
       );
-      return { ...state, blogs: filteredBlogs };
+      return { ...state, blogs: filteredBlogs, showCreateBlog: false,
+        showBlogList: true };
     case ACTIONS.SHOW_CREATE_BLOG:
       return { ...state, showCreateBlog: true, showBlogList: false };
     case ACTIONS.SHOW_BLOG_LIST:

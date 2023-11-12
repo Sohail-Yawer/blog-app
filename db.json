@@ -29,6 +29,11 @@
       "title": "title 6",
       "content": "test for blog 6. using reducer.",
       "id": 6
+    },
+    {
+      "title": "title 8",
+      "content": "testing content for blogs. somethibng something",
+      "id": 7
     }
   ]
 }
