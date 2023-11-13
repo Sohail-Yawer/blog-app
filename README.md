@@ -27,3 +27,10 @@ You may also see any lint errors in the console.
 Launches the db.json which will act as a store to store all blogs in json format.
 
 
+### `npm test -- --coverage`
+
+Launches the tests for the components and displays the test coverage of components
+
+### `npm run storybook`
+
+Launches storybook.js in port 6006 to test components in the storybook sandbox
